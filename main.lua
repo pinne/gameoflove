@@ -90,24 +90,45 @@ function love.draw()
   map = nextgen(map)
 end
 
+function load_next_map()
+  if   mapindex == #life105_maps then mapindex = 1
+  else mapindex = mapindex + 1 end
+  map = genmap(height, width)
+  map = loadmap(map, life105_maps[mapindex])
+end
+
+function load_prev_map()
+  if   mapindex == 1 then mapindex = #life105_maps
+  else mapindex = mapindex - 1 end
+  map = genmap(height, width)
+  map = loadmap(map, life105_maps[mapindex])
+end
+
+key_pressed = false
 function love.update(dt)
+  function love.keyreleased(key)
+    if key == "right" or key == "left" then
+      key_pressed = false
+    end
+    return
+  end
+
+  if love.keyboard.isDown("left") and not key_pressed then
+    key_pressed = true
+    load_prev_map()
+  end
+
+  if love.keyboard.isDown("right") and not key_pressed then
+    key_pressed = true
+    load_next_map()
+  end
+
   if love.keyboard.isDown("up")  then
     moveMap(0, -0.2 * tileSize * dt)
   end
+
   if love.keyboard.isDown("down")  then
     moveMap(0, 0.2 * tileSize * dt)
-  end
-  if love.keyboard.isDown("left")  then
-    if   mapindex == 1 then mapindex = #life105_maps
-    else mapindex = mapindex - 1 end
-    map = genmap(height, width)
-    map = loadmap(map, life105_maps[mapindex])
-  end
-  if love.keyboard.isDown("right")  then
-    if   mapindex == #life105_maps then mapindex = 1
-    else mapindex = mapindex + 1 end
-    map = genmap(height, width)
-    map = loadmap(map, life105_maps[mapindex])
   end
 end
 
