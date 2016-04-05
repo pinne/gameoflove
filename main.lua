@@ -1,19 +1,19 @@
 -- Game of Life
-DESCRIPTION = {
-  "  Rules:",
-  "        ",
-  "    1. Any live cell with fewer than two live neighbours dies, as if caused by under-population.",
-  "    2. Any live cell with two or three live neighbours lives on to the next generation.",
-  "    3. Any live cell with more than three live neighbours dies, as if by overcrowding.",
-  "    4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.",
-  "        ",
-  "        ",
-  "  Controls:",
-  "        ",
-  "    Use right and left arrows to browse through life patterns.",
-  "        ",
-  "        ",
-}
+DESCRIPTION = [[
+  Rules:
+
+    1. Any live cell with fewer than two live neighbours dies, as if caused by under-population.
+    2. Any live cell with two or three live neighbours lives on to the next generation.
+    3. Any live cell with more than three live neighbours dies, as if by overcrowding.
+    4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+
+
+  Controls:
+
+    Use right and left arrows to browse through life patterns.
+
+
+]]
 
 MAXHEALTH = 3
 HUD = {}
@@ -35,9 +35,9 @@ if aspect_rate_nazi then
 else
   width = 367
 end
-table.insert(DESCRIPTION, 'Aspect ratio: ' .. aspect_ratio);
-table.insert(DESCRIPTION, 'Map width:    ' .. width);
-table.insert(DESCRIPTION, 'Map height:   ' .. height);
+DESCRIPTION = DESCRIPTION .. 'Aspect ratio: ' .. aspect_ratio .. '\n'
+DESCRIPTION = DESCRIPTION .. 'Map width:    ' .. width .. '\n'
+DESCRIPTION = DESCRIPTION .. 'Map height:   ' .. height .. '\n'
 
 scale       = 0.6
 height      = math.floor(height * scale)
@@ -83,9 +83,7 @@ function love.draw()
     end
   end
   love.graphics.setColor(120, 120, 120)
-  for i=1, #DESCRIPTION do
-    love.graphics.print(DESCRIPTION[i], 5, i*15+20)
-  end
+  love.graphics.print(DESCRIPTION, 5, 35)
   decrmap(map)
   map = nextgen(map)
 end
@@ -121,14 +119,6 @@ function love.update(dt)
   if love.keyboard.isDown("right") and not key_pressed then
     key_pressed = true
     load_next_map()
-  end
-
-  if love.keyboard.isDown("up")  then
-    moveMap(0, -0.2 * tileSize * dt)
-  end
-
-  if love.keyboard.isDown("down")  then
-    moveMap(0, 0.2 * tileSize * dt)
   end
 end
 
@@ -185,6 +175,7 @@ function loadmap_lif105(map, file)
       print(line)
       local desc = string.match(line, "#D (.*)\r")
       table.insert(DESCRIPTION, desc)
+      if desc then table.insert(DESCRIPTION, '\n') end
     else
       local i = x
       for c in line:gmatch"." do
