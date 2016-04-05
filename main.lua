@@ -114,17 +114,25 @@ function load_maps(dir)
   return maps
 end
 
+function load_file(path)
+  local file, errstr = love.filesystem.newFile(path)
+  if errstr then
+    print(errstr)
+    return errstr
+  end
+  file:open("r")
+  return file:read()
+end
+
 function loadmap(map, file)
   path = 'maps/'
   file = path..file
-  f = io.open(file, "r")
-  local header = f:read("*a")
-  if string.match(header, "^#Life 1.06") then
+  local contents = load_file(file)
+  if string.match(contents, "^#Life 1.06") then
     map = loadmap_lif106(map, file)
-  elseif string.match(header, "^#Life 1.05") then
+  elseif string.match(contents, "^#Life 1.05") then
     map = loadmap_lif105(map, file)
   end
-  io.close()
   return map
 end
 
