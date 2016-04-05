@@ -140,7 +140,7 @@ end
 -- TODO: Custom rulesets
 function loadmap_lif105(map, file)
   io.input(file)
-  HUD["filename"] = string.match(file, "maps/(%w+)(%.%w+)")
+  HUD["filename"] = string.match(file, "maps/([%S^.]+)(%.%w+)")
   DESCRIPTION = {}
   local x_orig = math.floor(width  / 2)
   local y_orig = math.floor(height / 2)
